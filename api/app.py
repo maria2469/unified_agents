@@ -25,6 +25,10 @@ class CrewRequest(BaseModel):
     crew_name: str
     inputs: Dict[str, Any]
 
+@app.get("/")
+def root():
+    return {"message": "FastAPI is running on Railway 🚀"}
+
 @app.post("/execute_crew/")
 async def execute_crew(request: CrewRequest):
     # Check if the crew exists
@@ -53,8 +57,3 @@ async def execute_crew(request: CrewRequest):
     output = crew_definition.crew.kickoff(inputs=valid_inputs)
 
     return {"crew_name": request.crew_name, "output": output}
-
-# Start the server only for local development
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
