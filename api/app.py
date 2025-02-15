@@ -2,7 +2,12 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict, Any
-from mangum import Mangum  # Required for Vercel serverless deployment
+import sys
+import os
+
+# Ensure the root directory is in the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from crews import crews  # Import the crew definitions
 
 app = FastAPI()
@@ -49,5 +54,7 @@ async def execute_crew(request: CrewRequest):
 
     return {"crew_name": request.crew_name, "output": output}
 
-# Required for Vercel
-handler = Mangum(app)
+# Start the server only for local development
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
