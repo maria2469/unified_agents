@@ -4,18 +4,29 @@ from pydantic import BaseModel
 from typing import Dict, Any
 import sys
 import os
+import logging
 
 # Ensure the root directory is in the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from crews import crews  # Import the crew definitions
+# Logging setup
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+try:
+    from crews import crews  # Import the crew definitions
+    if not crews:
+        raise ValueError("The 'crews' dictionary is empty or not loaded properly!")
+except Exception as e:
+    logger.error(f"Failed to import 'crews': {e}")
+    crews = {}  # Avoid crashes
 
 app = FastAPI()
 
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins; modify this for security in production
+    allow_origins=["*"],  # Allow all origins (for development; restrict in production)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -27,7 +38,7 @@ class CrewRequest(BaseModel):
 
 @app.get("/")
 def root():
-    return {"message": "FastAPI is running on Railway 🚀"}
+    return {"message": "🚀 FastAPI is running on Railway!"}
 
 @app.post("/execute_crew/")
 async def execute_crew(request: CrewRequest):
@@ -57,3 +68,10 @@ async def execute_crew(request: CrewRequest):
     output = crew_definition.crew.kickoff(inputs=valid_inputs)
 
     return {"crew_name": request.crew_name, "output": output}
+
+# Use Railway's assigned PORT dynamically
+port = int(os.environ.get("PORT", 8080))
+
+# Run Uvicorn when deployed
+import uvicorn
+uvicorn.run(app, host="0.0.0.0", port=port)
