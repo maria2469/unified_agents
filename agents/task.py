@@ -84,28 +84,7 @@ reporting_task = Task(
 #     )
 # )
 
-trending_posts_task = Task(
-    description=(
-        """Retrieve trending posts from the specified subreddit {subreddit_name} using the Reddit API.  
-        Analyze the sentiment of each post title and return a structured summary that includes:  
-        - **Post Title:** The title of the trending post.  
-        - **Score:** The post upvote score.  
-        - **Sentiment Analysis:** A polarity score indicating the sentiment of the title.  
-        - **Post URL:** A direct link to the post.  
-        If a specific query is provided, ensure the analysis incorporates insights based on the query while 
-        maintaining a broad sentiment evaluation of the trending posts."""
-    ),
-    agent=trending_posts_agent,
-    expected_output=(
-        """A structured summary of trending posts from the given subreddit, including:  
-        - **Post Title:** Title of the trending post.  
-        - **Score:** Number of upvotes received.  
-        - **Sentiment Analysis:** Sentiment polarity score of the title.  
-        - **Post URL:** Direct link to the post.  
-        If a specific query is provided, the output should include insights tailored to the query while ensuring 
-        a complete sentiment analysis of trending discussions."""
-    )
-)
+
 
 medical_task = Task(
     description=(

@@ -110,26 +110,6 @@ reporting_analyst = Agent(
 )
 
 
-trending_posts_agent = Agent(
-    role="Reddit Trending Posts Analyst",
-    goal=(
-        """Retrieve trending posts from the specified subreddit {subreddit_name} using the Reddit API.  
-        Analyze the sentiment of each post title and provide a structured summary that includes:  
-        - **Post Title:** The title of the trending post.  
-        - **Score:** The post upvote score.  
-        - **Sentiment Analysis:** A polarity score indicating the sentiment of the title.  
-        - **Post URL:** A direct link to the post.  
-        If a specific query is provided, tailor the analysis accordingly while ensuring a broad sentiment evaluation."""
-    ),
-    backstory=(
-        """You are a Reddit trends analyst specializing in identifying and analyzing trending posts across subreddits.  
-        Your task is to fetch the most popular posts from a given subreddit and evaluate their sentiment to gauge 
-        the overall mood of the discussions. Regardless of whether a specific query is provided, you deliver 
-        a structured report containing key insights about trending content."""
-    ),
-    tools=[fetch_trending_posts],
-    llm=llm  # Assumes llm is defined and configured elsewhere.
-)
 
 
 medical_agent = Agent(
